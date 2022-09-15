@@ -1,0 +1,11 @@
+.editing-form__button_inactive {
+  opacity: .2;
+  pointer-events: none;
+  border: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+}
+
+.editing-form__button:hover {
+  opacity: .8;
+}

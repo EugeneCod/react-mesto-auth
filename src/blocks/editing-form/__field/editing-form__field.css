@@ -1,0 +1,14 @@
+.editing-form__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.editing-form__field:last-of-type {
+  margin-bottom: 13px;
+}
+
+@media (max-width: 767px) {
+  .editing-form__field:last-of-type {
+  margin-bottom: 11px;
+  }
+}

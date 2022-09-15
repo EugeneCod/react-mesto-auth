@@ -1,0 +1,27 @@
+.card__button-like {
+  padding: 0;
+  margin: 0 0 3px 0;
+  border: none;
+  background: none;
+  justify-self: end;
+  transition: opacity .3s ease-out;
+  cursor: pointer;
+  background-image: url(../../../images/elements__icon-like_disabled.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 22px;
+  height: 19px;
+  align-self: center;
+  outline: none;
+}
+
+
+.card__button-like:hover {
+  opacity: .5;
+}
+
+.card__button-like:active {
+  background-image: url(../../../images/elements__icon-like_active.svg);
+  opacity: 1;
+}

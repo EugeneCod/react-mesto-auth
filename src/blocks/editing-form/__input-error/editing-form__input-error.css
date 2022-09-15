@@ -1,0 +1,12 @@
+.editing-form__input-error {
+  font-size: 12px;
+  line-height: 1.21;
+  font-weight: 400;
+  color: red;
+  opacity: 1;
+  top: 32px;
+  left: 0;
+  transition: opacity .4s;
+  min-height: 29px;
+  max-height: 44px;
+}

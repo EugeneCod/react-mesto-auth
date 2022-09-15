@@ -1,0 +1,14 @@
+.editing-form__input-line {
+  font-size: 14px;
+  line-height: 1.21;
+  font-weight: 400;
+  padding: 0 0 8px 0;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+  margin-bottom: 5px;
+}
+
+.editing-form__input-line::placeholder {
+  color: #C4C4C4;
+}
