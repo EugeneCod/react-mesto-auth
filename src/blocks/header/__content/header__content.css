@@ -1,0 +1,13 @@
+.header__content {
+  min-height: 75px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #545454;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 767px) {
+  .header__content {
+    min-height: 56px;
+  }
+}

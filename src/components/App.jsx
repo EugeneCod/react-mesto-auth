@@ -129,9 +129,12 @@ function App() {
     }>
       <div className="App" id="app">
         <div className="wrapper">
-          <div className="container container_for_header">
-            <Header />
-          </div>
+            <Header 
+              buttonText="Выйти"
+              buttonColor="#fff"
+              onAuth=""
+              loginInfo="email@mail.com"
+            />
           <div className="container">
             <Main
               cards={cards}

@@ -35,6 +35,10 @@
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo-image/haeder__logo-image.css);
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__auth-button/header__auth-button.css);
+@import url(./blocks/header/__auth-group/header__auth-group.css);
+@import url(./blocks/header/__login-info/header__login-info.css);
+@import url(./blocks/header/__content/header__content.css);
 
 @import url(./blocks/content/content.css);
 

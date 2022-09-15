@@ -1,11 +1,28 @@
 .header {
-  min-height: 75px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #545454;
+  padding-top: 45px;
+  padding-left: 200px;
+  padding-right: 200px;
+  position: relative;
+}
+
+@media (max-width: 1060px) {
+  .header {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}
+
+@media (max-width: 860px) {
+  .header {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
 }
 
 @media (max-width: 767px) {
   .header {
-    min-height: 56px;
+    padding-top: 28px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
