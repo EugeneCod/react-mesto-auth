@@ -1,6 +1,6 @@
 import headerLogo from '../images/header__logo.svg';
 
-function Header({ buttonText, buttonColor, onAuth, loginInfo }) {
+function Header({ buttonText, buttonColor, loginInfo }) {
   return (
     <header className="header">
       <div className="header__content">
@@ -9,7 +9,7 @@ function Header({ buttonText, buttonColor, onAuth, loginInfo }) {
         </a>
         <div className="header__auth-group">
           <p className="header__login-info">{loginInfo}</p>
-          <button style={{color: buttonColor}} onClick={onAuth} type="button" className="header__auth-button">{buttonText}</button>
+          <button style={{color: buttonColor}} type="button" className="header__auth-button">{buttonText}</button>
         </div>
       </div>
     </header>

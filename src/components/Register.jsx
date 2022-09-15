@@ -1,65 +1,74 @@
-import React from 'react'
-import Header from './Header'
-import { useFormAndValidation } from '../hooks/useForm';
+import { useForm } from '../hooks/useForm';
+import * as auth from '../auth.js';
+import { useHistory } from 'react-router-dom';
+import Input from './Input';
+import { useState, useEffect } from 'react';
 
 function Register() {
 
-  const { values, setValues, handleChange, errors, setErrors, isValid, setIsValid, resetForm } = useFormAndValidation(false);
+  const { values, setValues, handleChange } = useForm({});
+  const [formValid, setFormValid] = useState(false);
+  const [inputValid, setInputValid] = useState({ name: false, link: false })
+  const [errMessages, setErrMessages] = useState({name: '', link: ''});
 
-  function signIn() {
+  useEffect(() => {
+    if (inputValid.name === false || inputValid.link === false) {
+      setFormValid(false);
+    } else {
+      setFormValid(true);
+    }
+  }, [inputValid, formValid]);
 
-  }
+  useEffect(() => {
+    setValues({});
+    setInputValid({ name: false, link: false });
+    setErrMessages({name: '', link: ''})
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
-    auth.register(email, password).then((res) => {
+    auth.register(values.email, values.password).then((res) => {
       if (res.statusCode !== 400) {
-        this.props.history.push('/login');
+        useHistory.push('/login');
       }
     });
-    
-
-    return (
-      <>
-        <Header
-          buttonText="Войти"
-          buttonColor="#fff"
-          onAuth={signIn}
-          loginInfo=""
-        />
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          name="regitration"
-          className="editing-form editing-form_related-to_regitration"
-          id="regitration"
-          method="get"
-        >
-          <fieldset className="editing-form__fieldset" form="regitration">
-            <legend className="editing-form__legend">
-              Региистрация
-            </legend>
-            <label className="editing-form__field">
-              <input
-                onChange={handleChange}
-                ref={inputRef}
-                type="url"
-                name="avatar"
-                placeholder="Ссылка на картинку"
-                required
-                className="editing-form__input-line" />
-              <span className="editing-form__input-error">{errMessage}</span>
-            </label>
-            <button
-              type="submit"
-              className={`editing-form__button ${!isValid && "editing-form__button_inactive"}`}
-            >
-              {buttonText}
-            </button>
-          </fieldset>
-        </form>
-      </>
-    )
   }
 
-  export default Register
+  return (
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      name="regitration"
+      className="editing-form editing-form_related-to_regitration"
+      id="regitration"
+      method="get"
+    >
+      <fieldset className="editing-form__fieldset" form="regitration">
+        <legend className="editing-form__legend">
+          Региистрация
+        </legend>
+        <Input 
+          value={values.name || ''}
+          onChange={handleChange}
+          type="text"
+          name="name"
+          placeholder="Имя"
+          minLength="2"
+          maxLength="40"
+          inputValid={inputValid}
+          setInputValid={setInputValid}
+          errMessages={errMessages}
+          setErrMessage={setErrMessages}
+        />
+        <button
+          type="submit"
+          className={`editing-form__button ${!formValid && "editing-form__button_inactive"}`}
+        >
+          Зарегистрироваться
+        </button>
+      </fieldset>
+    </form>
+  )
+}
+
+export default Register

@@ -9,6 +9,11 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupWithConfirmation from './PopupWithConfirmation';
+import ProtectedRoute from './ProtectedRoute';
+import Register from './Register';
+import Login from './Login';
+import { Switch, Route } from 'react-router-dom';
+
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -20,6 +25,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([])
   const [isLoading, setIsLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -111,6 +117,10 @@ function App() {
       })
   }
 
+  function handleLogin() {
+
+  }
+
   useEffect(() => {
     Promise.all([
       api.getUserInfo(),
@@ -129,23 +139,37 @@ function App() {
     }>
       <div className="App" id="app">
         <div className="wrapper">
-            <Header 
-              buttonText="Выйти"
-              buttonColor="#fff"
-              onAuth=""
-              loginInfo="email@mail.com"
-            />
+          <Header 
+            buttonText="Выйти"
+            buttonColor="#fff"
+            loginInfo="email@mail.com"
+          />
           <div className="container">
-            <Main
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDeleteIconClick}
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick}
-            />
-            <Footer />
+            <Switch>
+              <ProtectedRoute
+                path="/"
+                exact
+                loggedIn={loggedIn}
+                component={Main} 
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDeleteIconClick}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+              />
+              <Route path="/sign-up">
+                <Register />
+              </Route>
+              <Route path="/sign-in">
+                <Login handleLogin={handleLogin} />
+              </Route>
+              <Route path="*">
+                <p style={{color: "white", textAlign: "center", minHeight: "100vh"}}>404 NOT FOUND</p>
+              </Route>
+            </Switch>
+            {loggedIn && <Footer />}
             <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}
@@ -182,3 +206,5 @@ function App() {
 }
 
 export default App;
+
+  
