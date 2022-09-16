@@ -1,0 +1,13 @@
+.registration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  height: calc(100vh - 180px);
+}
+
+@media (max-width: 767px) {
+  .registration {
+    height: calc(100vh - 144px);
+  }
+}

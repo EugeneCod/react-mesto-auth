@@ -1,0 +1,15 @@
+.header__logout-button {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2222;
+  border: none;
+  background: none;
+  color: #a9a9a9;
+  transition: opacity .2s ease-out;
+  padding: 0;
+  height: fit-content;
+}
+
+.header__logout-button:hover {
+  opacity: .6;
+}

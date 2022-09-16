@@ -1,4 +1,4 @@
-function Input({ value, onChange, type, name, placeholder, minLength, maxLength, inputValid, setInputValid, errMessages, setErrMessage }) {
+function Input({ value, onChange, type, name, placeholder, minLength, maxLength, inputValid, setInputValid, errMessages, setErrMessage, place }) {
 
   function handleChange(e) {
     onChange(e);
@@ -17,10 +17,11 @@ function Input({ value, onChange, type, name, placeholder, minLength, maxLength,
           placeholder={placeholder}
           minLength={minLength}
           maxLength={maxLength}
-          className="editing-form__input-line" />
+          className={`editing-form__input-line editing-form__input-line_place_${place}`} />
         <span className="editing-form__input-error">{errMessages[name]}</span>
       </label>
   )
 }
+
 
 export default Input

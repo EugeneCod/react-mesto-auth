@@ -1,0 +1,12 @@
+.header__auth-link {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2222;
+  text-decoration: none;
+  transition: opacity .2s ease-out;
+  color: #fff;
+}
+
+.header__auth-link:hover {
+  opacity: .6;
+}

@@ -51,6 +51,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
         setInputValid={setInputValid}
         errMessages={errMessages}
         setErrMessage={setErrMessages}
+        place="modal"
       />
       <Input
         value={values.link || ''}
@@ -64,6 +65,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
         setInputValid={setInputValid}
         errMessages={errMessages}
         setErrMessage={setErrMessages}
+        place="modal"
       />
     </PopupWithForm>
   )

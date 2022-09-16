@@ -1,0 +1,11 @@
+.registration__signin-link {
+  font-size: 14px;
+  line-height: 1.21;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity .2s ease-out;
+}
+
+.registration__signin-link:hover {
+  opacity: .6;
+}

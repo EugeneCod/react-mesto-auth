@@ -58,6 +58,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
         setInputValid={setInputValid}
         errMessages={errMessages}
         setErrMessage={setErrMessages}
+        place="modal"
       />
       <Input
         value={values.about || ''}
@@ -71,6 +72,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
         setInputValid={setInputValid}
         errMessages={errMessages}
         setErrMessage={setErrMessages}
+        place="modal"
       />
     </PopupWithForm>
   )

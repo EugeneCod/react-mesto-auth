@@ -23,19 +23,25 @@
 @import url(./blocks/editing-form/editing-form.css);
 @import url(./blocks/editing-form/_related-to/editing-form_related-to_add-cards.css);
 @import url(./blocks/editing-form/_related-to/editing-form_related-to_edit-profile.css);
+@import url(./blocks/editing-form/_related-to/editing-form_related-to_login.css);
 @import url(./blocks/editing-form/__legend/_related-to/editing-form__legend_related-to_confirm.css);
 @import url(./blocks/editing-form/__button/editing-form__button.css);
+@import url(./blocks/editing-form/__button/_place/editing-form__button_place_auth.css);
 @import url(./blocks/editing-form/__button/_inactive.css/editing-form__button_inactive.css);
 @import url(./blocks/editing-form/__fieldset/editing-form__fieldset.css);
 @import url(./blocks/editing-form/__field/editing-form__field.css);
 @import url(./blocks/editing-form/__input-error/editing-form__input-error.css);
 @import url(./blocks/editing-form/__input-line/editing-form__input-line.css);
+@import url(./blocks/editing-form/__input-line/_place/editing-form__input-line_place_auth.css);
+@import url(./blocks/editing-form/__input-line/_place/editing-form__input-line_place_modal.css);
 @import url(./blocks/editing-form/__legend/editing-form__legend.css);
+@import url(./blocks/editing-form/__legend/_place/editing-form__legend_place_auth.css);
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo-image/haeder__logo-image.css);
 @import url(./blocks/header/__logo/header__logo.css);
-@import url(./blocks/header/__auth-button/header__auth-button.css);
+@import url(./blocks/header/__auth-link/header__auth-link.css);
+@import url(./blocks/header/__logout-button/header__logout-button.css);
 @import url(./blocks/header/__auth-group/header__auth-group.css);
 @import url(./blocks/header/__login-info/header__login-info.css);
 @import url(./blocks/header/__content/header__content.css);
@@ -70,3 +76,9 @@
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
 
+@import url(./blocks/login/login.css);
+
+@import url(./blocks/registration/registration.css);
+@import url(./blocks/registration/__signin/registration__signin.css);
+@import url(./blocks/registration/__signin-link/registration__signin-link.css);
+@import url(./blocks/registration/__signin-text/registration__signin-text.css);

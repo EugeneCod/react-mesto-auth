@@ -52,7 +52,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, buttonText }) {
           name="avatar"
           placeholder="Ссылка на картинку"
           required
-          className="editing-form__input-line" />
+          className="editing-form__input-line editing-form__input-line_place_modal" />
         <span className="editing-form__input-error">{errMessage}</span>
       </label>
     </PopupWithForm>
