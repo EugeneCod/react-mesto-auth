@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useForm } from '../hooks/useForm';
-import { useHistory, Link } from 'react-router-dom';
-import * as auth from '../auth.js';
+import { Link } from 'react-router-dom';
 import Input from './Input.jsx';
 
-function Register() {
+function Register({ idLoading, onRegistration }) {
 
-  const history = useHistory();
   const { values, setValues, handleChange } = useForm({});
   const [formValid, setFormValid] = useState(false);
-  const [inputValid, setInputValid] = useState({ name: false, link: false })
-  const [errMessages, setErrMessages] = useState({name: '', link: ''});
+  const [inputValid, setInputValid] = useState({ email: false, password: false })
+  const [errMessages, setErrMessages] = useState({email: '', password: ''});
 
   useEffect(() => {
-    if (inputValid.name === false || inputValid.link === false) {
+    if (inputValid.email === false || inputValid.password === false) {
       setFormValid(false);
     } else {
       setFormValid(true);
@@ -22,32 +20,22 @@ function Register() {
 
   useEffect(() => {
     setValues({});
-    setInputValid({ name: false, link: false });
-    setErrMessages({name: '', link: ''})
+    setInputValid({ email: false, password: false });
+    setErrMessages({email: '', password: ''})
   }, []);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!values.email || !values.password) {
-      return;
-    }
-    auth.authorize(values.email, values.password)
-      .then((data) => {
-        if (data.jwt) {
-          setValues({});
-          history.push('/');
-        }
-      })
-      .catch(err => console.log(err));
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onRegistration(values.email, values.password);
   }
-
+  
   return (
-    <div className="registration">
+    <section className="registration">
       <form
         onSubmit={handleSubmit}
         noValidate
         name="regitration"
-        className="editing-form editing-form_related-to_login"
+        className="editing-form editing-form_related-to_auth"
         id="regitration"
         method="get"
       >
@@ -75,7 +63,7 @@ function Register() {
             type="password"
             name="password"
             placeholder="Password"
-            minLength=""
+            minLength="8"
             maxLength=""
             inputValid={inputValid}
             setInputValid={setInputValid}
@@ -85,17 +73,18 @@ function Register() {
           />
           <button
             type="submit"
-            className={`editing-form__button editing-form__button_place_auth`}
-          >
-            Зарегистрироваться
+            className={`editing-form__button-auth ${!formValid && "editing-form__button-auth_inactive"}`}
+          >{!idLoading ? 'Зарегистрироваться' : 'Отправка данных...'}
           </button>
         </fieldset>
       </form>
       <div className="registration__signin">
           <span className="registration__signin-text">Уже зарегистрированы? <Link to="/sign-in" className="registration__signin-link">Войти</Link></span>
         </div>
-    </div>
+    </section>
   )
 }
 
 export default Register;
+
+// {"data":{"_id":"63260d0a6390a40014698dd5","email":"test@mymail.ru"}}

@@ -12,7 +12,9 @@ import PopupWithConfirmation from './PopupWithConfirmation';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
-import { Switch, Route, useHistory, Link } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
+import * as auth from '../utils/auth.js';
+import InfoTooltip from './InfoTooltip';
 
 
 function App() {
@@ -20,13 +22,15 @@ function App() {
   const [isEditProfilePopupOpen, setIisEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isPopupWithConfirmOpen, setIsPopupWithConfirmOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [idDeletedCard, setIdDeletedCard] = useState('');
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([])
   const [isLoading, setIsLoading] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [infoTooltipData, setInfoTooltipData] = useState({ text: '', imageName: '' });
+
   const history = useHistory();
 
   function handleCardLike(card) {
@@ -73,6 +77,7 @@ function App() {
     setIisEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsPopupWithConfirmOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({})
   }
 
@@ -120,13 +125,46 @@ function App() {
   }
 
   function handleLogin() {
-
+    setLoggedIn(true);
+    history.push('/');
   }
 
   function handleLogout() {
     setLoggedIn(false);
     history.push('/sign-in');
-    console.log(loggedIn);
+  }
+
+  // function handleRegistration(email, password) {
+  //   setIsLoading(true);
+  //   auth.register(email, password)
+  //     .then((res) => {
+  //       setInfoTooltipData({
+  //         text: 'Вы успешно зарегистрировались!',
+  //         imageName: 'approval'
+  //       });
+  //       setIsInfoTooltipOpen(true);
+  //       history.push('/sign-in');
+  //     })
+  //     .catch(err => {
+  //       setInfoTooltipData({
+  //         text: 'Что-то пошло не так! Попробуйте ещё раз.',
+  //         imageName: 'failure'
+  //       });
+  //       setIsInfoTooltipOpen(true);
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false);
+  //     })
+  // }
+  
+  function handleRegistration() {
+        setInfoTooltipData({
+          text: 'Вы успешно зарегистрировались!',
+          imageName: 'approval'
+        });
+        setIsInfoTooltipOpen(true);
+        history.push('/sign-in');
+    
   }
 
   useEffect(() => {
@@ -154,6 +192,18 @@ function App() {
           />
           <div className="container">
             <Switch>
+              <Route path="/sign-up">
+                <Register
+                  isLoading={isLoading}
+                  onRegistration={handleRegistration}
+                />
+              </Route>
+              <Route path="/sign-in">
+                <Login
+                  isLoading={isLoading}
+                  onLogin={handleLogin}
+                />
+              </Route>
               <ProtectedRoute
                 path="/"
                 exact
@@ -167,12 +217,6 @@ function App() {
                 onAddPlace={handleAddPlaceClick}
                 onCardClick={handleCardClick}
               />
-              <Route exact path="/sign-up">
-                <Register />
-              </Route>
-              <Route exact path="/sign-in">
-                <Login />
-              </Route>
               <Route path="*">
                 <p style={{ color: "white", textAlign: "center", minHeight: "100vh" }}>404 NOT FOUND</p>
               </Route>
@@ -205,6 +249,11 @@ function App() {
             <ImagePopup
               onClose={closeAllPopups}
               card={selectedCard}
+            />
+            <InfoTooltip
+              isOpen={isInfoTooltipOpen}
+              onClose={closeAllPopups}
+              data={infoTooltipData}
             />
           </div>
         </div>

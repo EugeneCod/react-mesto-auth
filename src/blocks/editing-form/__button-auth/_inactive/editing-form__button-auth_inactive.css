@@ -1,0 +1,4 @@
+.editing-form__button-auth_inactive {
+  opacity: .3;
+  pointer-events: none;
+}
