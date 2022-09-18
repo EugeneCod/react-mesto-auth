@@ -1,53 +1,43 @@
 const BASE_URL = 'https://auth.nomoreparties.co';
 
-const getJsonOrError = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
-}
-
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({email, password})
   })
-  .then(getJsonOrError())
+  .then(response => {
+    return response.json().then(json => {
+      return response.ok ? json : Promise.reject(json.error);
+    });
+  });
 };
 
-export const authorize = (identifier, password) => {
-  return fetch(`${BASE_URL}/auth/local`, {
+export const authorize = (email, password) => {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({identifier, password})
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email, password})
   })
-  .then((response => response.json()))
-  .then((data) => {
-    if (data.user){
-      localStorage.setItem('jwt', data.jwt);
-      
-      return data;
-    } 
+  .then(response => {
+    return response.json().then(json => {
+      json.token && localStorage.setItem('jwt', json.token);
+      return response.ok ? json : Promise.reject(json.error);
+    });
   })
-  .catch(err => console.log(err))
 };
 
-export const checkToken = (token) => {
+export const checkToken = () => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
-      'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
     }
   })
-  .then(res => res.json())
-  .then(data => data)
+  .then(response => {
+    return response.json().then(json => {
+      return response.ok ? json.data : Promise.reject(json.error);
+    });
+  })
 }

@@ -12,7 +12,7 @@ import PopupWithConfirmation from './PopupWithConfirmation';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
 import * as auth from '../utils/auth.js';
 import InfoTooltip from './InfoTooltip';
 
@@ -28,10 +28,35 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([])
   const [isLoading, setIsLoading] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('')
   const [infoTooltipData, setInfoTooltipData] = useState({ text: '', imageName: '' });
-
   const history = useHistory();
+
+  console.log(localStorage.getItem('jwt'));
+
+  useEffect(() => {
+    Promise.all([
+      api.getUserInfo(),
+      api.getCards(),
+    ])
+      .then(([userData, cardsData]) => {
+        setCurrentUser(userData);
+        setCards(cardsData)
+      })
+      .catch(err => console.log(`${err} при первичной загрузке данных`));
+  }, [])
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      auth.checkToken()
+      .then(data => {
+        setLoggedIn(true);
+        setUserEmail(data.email)
+      })
+    }
+  }, [])
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -124,61 +149,48 @@ function App() {
       })
   }
 
-  function handleLogin() {
-    setLoggedIn(true);
-    history.push('/');
-  }
-
   function handleLogout() {
     setLoggedIn(false);
     history.push('/sign-in');
   }
-
-  // function handleRegistration(email, password) {
-  //   setIsLoading(true);
-  //   auth.register(email, password)
-  //     .then((res) => {
-  //       setInfoTooltipData({
-  //         text: 'Вы успешно зарегистрировались!',
-  //         imageName: 'approval'
-  //       });
-  //       setIsInfoTooltipOpen(true);
-  //       history.push('/sign-in');
-  //     })
-  //     .catch(err => {
-  //       setInfoTooltipData({
-  //         text: 'Что-то пошло не так! Попробуйте ещё раз.',
-  //         imageName: 'failure'
-  //       });
-  //       setIsInfoTooltipOpen(true);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     })
-  // }
   
-  function handleRegistration() {
+  function handleRegistration(email, password) {
+    setIsLoading(true);
+    auth.register(email, password)
+      .then((res) => {
         setInfoTooltipData({
           text: 'Вы успешно зарегистрировались!',
           imageName: 'approval'
         });
         setIsInfoTooltipOpen(true);
         history.push('/sign-in');
-    
+      })
+      .catch(err => {
+        setInfoTooltipData({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          // text: err,
+          imageName: 'failure'
+        });
+        setIsInfoTooltipOpen(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   }
 
-  useEffect(() => {
-    Promise.all([
-      api.getUserInfo(),
-      api.getCards(),
-    ])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData)
+  function handleLogin(email, password) {
+    setIsLoading(true);
+    auth.authorize(email, password)
+      .then((res) => {
+        setLoggedIn(true);
+        history.push('/');
       })
-      .catch(err => console.log(`${err} при первичной загрузке данных`));
-  }, [])
-
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+  
   return (
     <CurrentUserContext.Provider value={
       currentUser
@@ -186,23 +198,29 @@ function App() {
       <div className="App" id="app">
         <div className="wrapper">
           <Header
-            loginInfo="email@mail.com"
+            loginInfo={userEmail}
             loggedIn={loggedIn}
             onLogout={handleLogout}
           />
           <div className="container">
             <Switch>
               <Route path="/sign-up">
-                <Register
-                  isLoading={isLoading}
-                  onRegistration={handleRegistration}
-                />
+                {loggedIn 
+                  ? <Redirect to="/" />
+                  : <Register
+                    isLoading={isLoading}
+                    onRegistration={handleRegistration}
+                  />
+                }
               </Route>
               <Route path="/sign-in">
-                <Login
-                  isLoading={isLoading}
-                  onLogin={handleLogin}
-                />
+                {loggedIn 
+                  ? <Redirect to="/" />
+                  : <Login
+                    isLoading={isLoading}
+                    onLogin={handleLogin}
+                  />
+                }
               </Route>
               <ProtectedRoute
                 path="/"
@@ -218,7 +236,7 @@ function App() {
                 onCardClick={handleCardClick}
               />
               <Route path="*">
-                <p style={{ color: "white", textAlign: "center", minHeight: "100vh" }}>404 NOT FOUND</p>
+                <p style={{ color: "white", textAlign: "center", minHeight: "100vh", marginTop: "50px" }}>404 NOT FOUND</p>
               </Route>
             </Switch>
             {loggedIn && <Footer />}

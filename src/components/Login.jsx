@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useForm } from '../hooks/useForm';
-import { Link } from 'react-router-dom';
 import Input from './Input.jsx';
 
 function Login({ idLoading, onLogin  }) {
@@ -26,7 +25,7 @@ function Login({ idLoading, onLogin  }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    onLogin();
+    onLogin(values.email, values.password);
   }
   
   return (

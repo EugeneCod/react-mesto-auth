@@ -3,3 +3,9 @@
   justify-content: space-between;
   padding-top: 5px;
 }
+
+@media (max-width: 767px) {
+  .header__auth-group {
+    margin-right: 30px;
+  }
+}

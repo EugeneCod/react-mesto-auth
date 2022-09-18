@@ -20,7 +20,9 @@ function Header({ loggedIn, loginInfo, onLogout }) {
               <button type="button" className="header__logout-button" onClick={onLogout}>Выйти</button>
             </div>)
           : 
-            (<Link to={nextPath} className="header__auth-link">{linkText}</Link>)
+            (<div className="header__auth-group">
+              <Link to={nextPath} className="header__auth-link">{linkText}</Link>
+            </div>)
         }
       </div>
     </header>
