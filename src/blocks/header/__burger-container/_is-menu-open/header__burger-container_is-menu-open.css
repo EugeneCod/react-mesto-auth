@@ -1,0 +1,8 @@
+.header__burger-container_is-menu-open::before {
+  transform: rotate(45deg);
+  top: 11px;
+}
+.header__burger-container_is-menu-open::after {
+  transform: rotate(-45deg);
+  bottom: 11px;
+}

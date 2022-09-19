@@ -33,7 +33,7 @@ function App() {
   const [infoTooltipData, setInfoTooltipData] = useState({ text: '', imageName: '' });
   const history = useHistory();
 
-  console.log(localStorage.getItem('jwt'));
+  // console.log(localStorage.getItem('jwt'));
 
   useEffect(() => {
     Promise.all([

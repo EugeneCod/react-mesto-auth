@@ -1,0 +1,33 @@
+.header__burger-container {
+  display: none;
+  position: relative;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  z-index: 3;
+  margin-right: 30px;
+  transition: opacity .2s ease-out;
+  cursor: pointer;
+}
+
+.header__burger-container::before,
+.header__burger-container::after {
+  content: '';
+  background-color: #fff;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  left: 0;
+  transition: all 0.5s ease 0s;
+}
+
+.header__burger-container::before {
+  top: 0;
+}
+.header__burger-container::after {
+  bottom: 0;
+}
+
+.header__burger-container:hover {
+  opacity: .6;
+}

@@ -1,0 +1,8 @@
+.header__burger {
+  position: absolute;
+  background-color: #fff;
+  width: 100%;
+  height: 3px;
+  top: 11px;
+  transition: all 0.5s ease 0s;
+}

@@ -3,10 +3,16 @@
   font-size: 18px;
   line-height: 1.2222;
   text-decoration: none;
-  transition: opacity .2s ease-out;
+  transition: all .2s ease-out;
   color: #fff;
 }
 
 .header__auth-link:hover {
   opacity: .6;
+}
+
+@media (max-width: 767px) {
+  .header__auth-link {
+    margin-right: 30px;
+  }
 }

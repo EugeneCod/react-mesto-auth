@@ -3,6 +3,7 @@
   padding-left: 200px;
   padding-right: 200px;
   position: relative;
+  transition: all 0.5s ease 0s;
 }
 
 @media (max-width: 1060px) {

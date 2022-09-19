@@ -49,8 +49,16 @@
 @import url(./blocks/header/__auth-link/header__auth-link.css);
 @import url(./blocks/header/__logout-button/header__logout-button.css);
 @import url(./blocks/header/__auth-group/header__auth-group.css);
+@import url(./blocks/header/__auth-group/_is-menu/header__auth-group_is-menu.css);
+@import url(./blocks/header/__auth-group/_is-menu-open/header__auth-group_is-menu-open.css);
 @import url(./blocks/header/__login-info/header__login-info.css);
 @import url(./blocks/header/__content/header__content.css);
+@import url(./blocks/header/__content/_is-menu-open/header__content_is-menu-open.css);
+@import url(./blocks/header/__burger-container/header__burger-container.css);
+@import url(./blocks/header/__burger-container/_is-menu/header__burger-container_is-menu.css);
+@import url(./blocks/header/__burger-container/_is-menu-open/header__burger-container_is-menu-open.css);
+@import url(./blocks/header/__burger/header__burger.css);
+@import url(./blocks/header/__burger/_is-menu-open/header__burger_is-menu-open.css);
 
 @import url(./blocks/content/content.css);
 

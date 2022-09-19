@@ -6,3 +6,10 @@
   line-height: 1.2222;
   margin-right: 24px;
 }
+
+@media (max-width: 767px) {
+  .header__login-info {
+    margin-right: 0;
+    margin-bottom: 18px;
+  }
+}

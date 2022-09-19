@@ -8,6 +8,7 @@
   transition: opacity .2s ease-out;
   padding: 0;
   height: fit-content;
+  cursor: pointer;
 }
 
 .header__logout-button:hover {
