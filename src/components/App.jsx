@@ -33,7 +33,7 @@ function App() {
   const [infoTooltipData, setInfoTooltipData] = useState({ text: '', imageName: '' });
   const history = useHistory();
 
-  // console.log(localStorage.getItem('jwt'));
+  console.log(localStorage.getItem('jwt'));
 
   useEffect(() => {
     Promise.all([
@@ -50,11 +50,13 @@ function App() {
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      auth.checkToken()
+      auth.checkToken(jwt)
       .then(data => {
+        console.log(data);
         setLoggedIn(true);
         setUserEmail(data.email)
       })
+      .catch(err => console.log(err));
     }
   }, [])
 

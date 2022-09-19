@@ -1,7 +1,6 @@
 .header__content_is-menu-open {
   border-top: 1px solid #545454;
-  height: 83px;
-  /* align-items: center; */
+  min-height: 83px;
   padding-top: 28px;
-  margin-top: 119px;
+  margin-top: 113px;
 }
