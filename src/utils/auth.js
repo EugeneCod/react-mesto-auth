@@ -33,7 +33,7 @@ export const authorize = (email, password) => {
   })
 };
 
-export const checkToken = (token) => {
+export const getTokenAndEmail = (token) => {
   return request({
     url: '/users/me',
     method: 'GET',

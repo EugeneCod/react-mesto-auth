@@ -46,18 +46,25 @@ function App() {
       })
       .catch(err => console.log(`${err} при первичной загрузке данных`));
   }, [])
-
+  
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      auth.checkToken(jwt)
+    if (!loggedIn) return;
+    history.push('/');
+  }, [loggedIn])
+  
+  useEffect(() => {
+    function tokenCheck () {
+      if (!localStorage.getItem('jwt')) return;
+      const jwt = localStorage.getItem('jwt');
+      auth.getTokenAndEmail(jwt)
       .then(data => {
-        console.log(data);
         setLoggedIn(true);
-        setUserEmail(data.email)
+        setUserEmail(data.email);
+        history.push('/');
       })
       .catch(err => console.log(err));
     }
+    tokenCheck();
   }, [])
 
   function handleCardLike(card) {
@@ -150,11 +157,6 @@ function App() {
         setIsLoading(false);
       })
   }
-
-  function handleLogout() {
-    setLoggedIn(false);
-    history.push('/sign-in');
-  }
   
   function handleRegistration(email, password) {
     setIsLoading(true);
@@ -184,13 +186,18 @@ function App() {
     setIsLoading(true);
     auth.authorize(email, password)
       .then((res) => {
+        localStorage.setItem('jwt', res.token);
         setLoggedIn(true);
-        history.push('/');
       })
       .catch(err => console.log(err))
       .finally(() => {
         setIsLoading(false);
       })
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    history.push('/sign-in');
   }
   
   return (
@@ -207,22 +214,16 @@ function App() {
           <div className="container">
             <Switch>
               <Route path="/sign-up">
-                {loggedIn 
-                  ? <Redirect to="/" />
-                  : <Register
-                    isLoading={isLoading}
-                    onRegistration={handleRegistration}
-                  />
-                }
+                <Register
+                  isLoading={isLoading}
+                  onRegistration={handleRegistration}
+                />
               </Route>
               <Route path="/sign-in">
-                {loggedIn 
-                  ? <Redirect to="/" />
-                  : <Login
-                    isLoading={isLoading}
-                    onLogin={handleLogin}
-                  />
-                }
+                <Login
+                  isLoading={isLoading}
+                  onLogin={handleLogin}
+                />
               </Route>
               <ProtectedRoute
                 path="/"
