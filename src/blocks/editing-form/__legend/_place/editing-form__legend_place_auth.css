@@ -1,3 +1,10 @@
 .editing-form__legend_place_auth {
   text-align: center;
 }
+
+@media (max-width: 767px) {
+  .editing-form__legend_place_auth {
+    font-size: 20px;
+    margin-bottom: 42px;
+  }
+}

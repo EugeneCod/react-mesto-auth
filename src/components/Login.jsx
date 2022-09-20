@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from '../hooks/useForm';
 import Input from './Input.jsx';
 
-function Login({ idLoading, onLogin  }) {
+function Login({ buttonText, onLogin  }) {
 
   const { values, setValues, handleChange } = useForm({});
   const [formValid, setFormValid] = useState(false);
@@ -21,7 +21,7 @@ function Login({ idLoading, onLogin  }) {
     setValues({});
     setInputValid({ email: false, password: false });
     setErrMessages({email: '', password: ''})
-  }, []);
+  }, [setValues]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -73,7 +73,8 @@ function Login({ idLoading, onLogin  }) {
           <button
             type="submit"
             className={`editing-form__button-auth ${!formValid && "editing-form__button-auth_inactive"}`}
-          >{!idLoading ? 'Войти' : 'Выполнение...'}
+          >
+            {buttonText}
           </button>
         </fieldset>
       </form>

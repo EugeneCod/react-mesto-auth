@@ -15,7 +15,7 @@ const request = async ({
     ...!!data && { body: JSON.stringify(data) },
   });
   const json = await response.json();
-  return response.ok ? json : Promise.reject(json.error);
+  return response.ok ? json : Promise.reject(json.message);
 }
 
 export const register = (email, password) => {
@@ -25,7 +25,6 @@ export const register = (email, password) => {
   })
 };
 
-// json.token && localStorage.setItem('jwt', json.token);
 export const authorize = (email, password) => {
   return request({
     url: '/signin',
@@ -33,7 +32,7 @@ export const authorize = (email, password) => {
   })
 };
 
-export const getTokenAndEmail = (token) => {
+export const getEmail = (token) => {
   return request({
     url: '/users/me',
     method: 'GET',

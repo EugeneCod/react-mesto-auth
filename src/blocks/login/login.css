@@ -7,6 +7,7 @@
 
 @media (max-width: 767px) {
   .login {
-    height: calc(100vh - 144px);
+    height: calc(100vh - 126px);
+    padding-top: 42px;
   }
 }

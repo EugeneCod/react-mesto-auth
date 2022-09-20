@@ -3,7 +3,7 @@ import { useForm } from '../hooks/useForm';
 import { Link } from 'react-router-dom';
 import Input from './Input.jsx';
 
-function Register({ idLoading, onRegistration }) {
+function Register({ buttonText, onRegistration }) {
 
   const { values, setValues, handleChange } = useForm({});
   const [formValid, setFormValid] = useState(false);
@@ -22,7 +22,7 @@ function Register({ idLoading, onRegistration }) {
     setValues({});
     setInputValid({ email: false, password: false });
     setErrMessages({email: '', password: ''})
-  }, []);
+  }, [setValues]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -74,7 +74,8 @@ function Register({ idLoading, onRegistration }) {
           <button
             type="submit"
             className={`editing-form__button-auth ${!formValid && "editing-form__button-auth_inactive"}`}
-          >{!idLoading ? 'Зарегистрироваться' : 'Отправка данных...'}
+          >
+            {buttonText}
           </button>
         </fieldset>
       </form>

@@ -12,7 +12,7 @@ import PopupWithConfirmation from './PopupWithConfirmation';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
-import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import * as auth from '../utils/auth.js';
 import InfoTooltip from './InfoTooltip';
 
@@ -33,8 +33,6 @@ function App() {
   const [infoTooltipData, setInfoTooltipData] = useState({ text: '', imageName: '' });
   const history = useHistory();
 
-  console.log(localStorage.getItem('jwt'));
-
   useEffect(() => {
     Promise.all([
       api.getUserInfo(),
@@ -50,22 +48,22 @@ function App() {
   useEffect(() => {
     if (!loggedIn) return;
     history.push('/');
-  }, [loggedIn])
+  }, [loggedIn, history])
   
   useEffect(() => {
     function tokenCheck () {
       if (!localStorage.getItem('jwt')) return;
       const jwt = localStorage.getItem('jwt');
-      auth.getTokenAndEmail(jwt)
-      .then(data => {
+      auth.getEmail(jwt)
+      .then(res => {
         setLoggedIn(true);
-        setUserEmail(data.email);
+        setUserEmail(res.data.email);
         history.push('/');
       })
       .catch(err => console.log(err));
     }
     tokenCheck();
-  }, [])
+  }, [history])
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -189,7 +187,15 @@ function App() {
         localStorage.setItem('jwt', res.token);
         setLoggedIn(true);
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err);
+        setInfoTooltipData({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          // text: err,
+          imageName: 'failure'
+        });
+        setIsInfoTooltipOpen(true);
+      })
       .finally(() => {
         setIsLoading(false);
       })
@@ -197,6 +203,7 @@ function App() {
 
   function handleLogout() {
     localStorage.removeItem('jwt');
+    setLoggedIn(false);
     history.push('/sign-in');
   }
   
@@ -213,31 +220,33 @@ function App() {
           />
           <div className="container">
             <Switch>
+              <ProtectedRoute 
+                path="/"
+                exact
+                loggedIn={loggedIn}
+              >
+                <Main 
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDeleteIconClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick}
+                />
+              </ProtectedRoute>
               <Route path="/sign-up">
                 <Register
-                  isLoading={isLoading}
+                  buttonText={!isLoading ? 'Зарегистрироваться' : 'Выполнение...'}
                   onRegistration={handleRegistration}
                 />
               </Route>
               <Route path="/sign-in">
                 <Login
-                  isLoading={isLoading}
+                  buttonText={!isLoading ? "Войти" : "Выполнение..."}
                   onLogin={handleLogin}
                 />
               </Route>
-              <ProtectedRoute
-                path="/"
-                exact
-                loggedIn={loggedIn}
-                component={Main}
-                cards={cards}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDeleteIconClick}
-                onEditAvatar={handleEditAvatarClick}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onCardClick={handleCardClick}
-              />
               <Route path="*">
                 <p style={{ color: "white", textAlign: "center", minHeight: "100vh", marginTop: "50px" }}>404 NOT FOUND</p>
               </Route>
