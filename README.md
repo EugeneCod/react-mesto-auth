@@ -8,4 +8,4 @@
 * В данной работе реализовано:
   * роутинг с применеием библиотеки react-router-dom v5.2.1
   * взаимодействие с Api в части авторизации, регистрации и проверки токена через сервис `https://auth.nomoreparties.co`
-  * cтраница опубликована на GitHub Pages[GitHub Pages](https://eugenecod.github.io/react-mesto-auth/)
+  * cтраница опубликована на [GitHub Pages](https://eugenecod.github.io/react-mesto-auth/)
