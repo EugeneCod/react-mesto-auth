@@ -1,29 +1,23 @@
-import { useEffect } from 'react';
-import closeIcon from '../images/popup__close-icon.svg';
+import { useState, useEffect } from 'react';
+import Popup from './Popup';
+
 
 function ImagePopup({ onClose, card }) {
-
+  const [isOpen, setIsOpen] = useState(false);
+  
   useEffect(() => {
-    function handleEscClose(evt) {
-      if (evt.key === 'Escape') {
-        onClose();
-      }
-    }
-
-    Object.keys(card).length !== 0 && document.addEventListener('keyup', handleEscClose);
-    return () => document.removeEventListener('keyup', handleEscClose);
-  }, [card, onClose])
-
+    setIsOpen(Object.keys(card).length !== 0)
+  }, [card]);
+  
   return (
-    <div onClick={onClose} className={`popup popup_contain_picture ${Object.keys(card).length !== 0 && 'popup_opened'}`}>
-      <div onClick={(e) => e.stopPropagation()} className="popup__container popup__container_contain_picture">
-        <button onClick={onClose} type="button" className="popup__close-button">
-          <img src={closeIcon} alt="Закрыть" className="popup__close-icon" />
-        </button>
-        <img src={card?.link} alt={card?.name} className="popup__image" />
-        <p className="popup__image-caption">{card?.name}</p>
-      </div>
-    </div>
+    <Popup
+      isOpen = {isOpen}
+      onClose = {onClose}
+      name = "picture"
+    >
+      <img src={card?.link} alt={card?.name} className="popup__image" />
+      <p className="popup__image-caption">{card?.name}</p>
+    </Popup>
   )
 }
 

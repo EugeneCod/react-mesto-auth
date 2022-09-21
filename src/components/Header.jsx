@@ -24,7 +24,7 @@ function Header({ loggedIn, loginInfo, onLogout }) {
     return () => {
       window.removeEventListener('resize', handleResize);
     }
-  }, [])
+  }, [windowWidth])
 
   useEffect(() => {
     if (windowWidth > screenWithTablet && (isMenu || isMenuOpen)) {
