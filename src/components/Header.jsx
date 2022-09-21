@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import headerLogo from '../images/header__logo.svg';
 
+const screenWithTablet = 767;
+
 function Header({ loggedIn, loginInfo, onLogout }) {
   const location = useLocation();
   const linkText = `${location.pathname === '/sign-in' ? 'Регистрация' : 'Войти'}`;
@@ -17,26 +19,25 @@ function Header({ loggedIn, loginInfo, onLogout }) {
       setWindowWidth(window.innerWidth);
     }
     window.addEventListener('resize', handleResize);
-    if (windowWidth <= 767){setIsMenu(true)}
+    if (windowWidth <= screenWithTablet){setIsMenu(true)}
 
     return () => {
       window.removeEventListener('resize', handleResize);
     }
-    
   }, [])
 
   useEffect(() => {
-    if (windowWidth > 767 && (isMenu || isMenuOpen)) {
+    if (windowWidth > screenWithTablet && (isMenu || isMenuOpen)) {
       setIsMenu(false);
       setIsMenuOpen(false);
     }
   }, [windowWidth, isMenu, isMenuOpen])
 
   useEffect(() => {
-    if (windowWidth <= 767 && !loggedIn) {
+    if (windowWidth <= screenWithTablet && !loggedIn) {
       setIsMenu(false);
       setIsMenuOpen(false);
-    } else if (windowWidth <= 767) {
+    } else if (windowWidth <= screenWithTablet) {
       setIsMenu(true);
     }
   }, [windowWidth, loggedIn])
