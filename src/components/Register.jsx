@@ -8,27 +8,23 @@ function Register({ buttonText, onRegistration }) {
   const { values, setValues, handleChange } = useForm({});
   const [formValid, setFormValid] = useState(false);
   const [inputValid, setInputValid] = useState({ email: false, password: false })
-  const [errMessages, setErrMessages] = useState({email: '', password: ''});
+  const [errMessages, setErrMessages] = useState({ email: '', password: '' });
 
   useEffect(() => {
-    if (inputValid.email === false || inputValid.password === false) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
+    setFormValid(!!inputValid.email && !!inputValid.password);
   }, [inputValid, formValid]);
 
   useEffect(() => {
     setValues({});
     setInputValid({ email: false, password: false });
-    setErrMessages({email: '', password: ''})
+    setErrMessages({ email: '', password: '' })
   }, [setValues]);
 
   function handleSubmit(evt) {
     evt.preventDefault();
     onRegistration(values.email, values.password);
   }
-  
+
   return (
     <section className="registration">
       <form
@@ -43,7 +39,7 @@ function Register({ buttonText, onRegistration }) {
           <legend className="editing-form__legend editing-form__legend_place_auth">
             Регистрация
           </legend>
-          <Input 
+          <Input
             value={values.email || ''}
             onChange={handleChange}
             type="email"
@@ -57,7 +53,7 @@ function Register({ buttonText, onRegistration }) {
             setErrMessage={setErrMessages}
             place="auth"
           />
-          <Input 
+          <Input
             value={values.password || ''}
             onChange={handleChange}
             type="password"
@@ -80,8 +76,8 @@ function Register({ buttonText, onRegistration }) {
         </fieldset>
       </form>
       <div className="registration__signin">
-          <span className="registration__signin-text">Уже зарегистрированы? <Link to="/sign-in" className="registration__signin-link">Войти</Link></span>
-        </div>
+        <span className="registration__signin-text">Уже зарегистрированы? <Link to="/sign-in" className="registration__signin-link">Войти</Link></span>
+      </div>
     </section>
   )
 }

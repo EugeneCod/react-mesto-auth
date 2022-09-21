@@ -10,11 +10,7 @@ function Login({ buttonText, onLogin  }) {
   const [errMessages, setErrMessages] = useState({email: '', password: ''});
 
   useEffect(() => {
-    if (inputValid.email === false || inputValid.password === false) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
+    setFormValid(!!inputValid.email && !!inputValid.password);
   }, [inputValid, formValid]);
 
   useEffect(() => {
