@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useForm } from '../hooks/useForm';
 import Input from './Input.jsx';
 
-function Register({ buttonText, onRegistration }) {
+function Register({ buttonText, onRegistration, linkToSignIn }) {
 
   const { values, setValues, handleChange } = useForm({});
   const [formValid, setFormValid] = useState(false);
@@ -76,12 +76,10 @@ function Register({ buttonText, onRegistration }) {
         </fieldset>
       </form>
       <div className="registration__signin">
-        <span className="registration__signin-text">Уже зарегистрированы? <Link to="/sign-in" className="registration__signin-link">Войти</Link></span>
+        <span className="registration__signin-text">Уже зарегистрированы? <Link to={linkToSignIn} className="registration__signin-link">Войти</Link></span>
       </div>
     </section>
   )
 }
 
 export default Register;
-
-// {"data":{"_id":"63260d0a6390a40014698dd5","email":"test@mymail.ru"}}

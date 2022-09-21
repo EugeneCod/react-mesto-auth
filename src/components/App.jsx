@@ -28,6 +28,12 @@ const infoTooltpOptions = {
   }
 }
 
+const routes = {
+  baseRoute: '/',
+  signIn: '/sign-in',
+  signUp: '/sign-up',
+}; 
+
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIisEditProfilePopupOpen] = useState(false);
@@ -59,7 +65,7 @@ function App() {
 
   useEffect(() => {
     if (!loggedIn) return;
-    history.push('/');
+    history.push(routes.baseRoute);
   }, [loggedIn, history])
 
   useEffect(() => {
@@ -70,7 +76,7 @@ function App() {
         .then(res => {
           setLoggedIn(true);
           setUserEmail(res.data.email);
-          history.push('/');
+          history.push(routes.baseRoute);
         })
         .catch(err => console.log(err));
     }
@@ -174,7 +180,7 @@ function App() {
       .then((res) => {
         setInfoTooltipData(infoTooltpOptions.approval);
         setIsInfoTooltipOpen(true);
-        history.push('/sign-in');
+        history.push(routes.signIn);
       })
       .catch(err => {
         setInfoTooltipData(infoTooltpOptions.failure);
@@ -205,7 +211,7 @@ function App() {
   function handleLogout() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
-    history.push('/sign-in');
+    history.push(routes.signIn);
   }
 
   return (
@@ -222,9 +228,10 @@ function App() {
           <div className="container">
             <Switch>
               <ProtectedRoute
-                path="/"
+                path={routes.baseRoute}
                 exact
                 loggedIn={loggedIn}
+                linkToSignIn={routes.signIn}
               >
                 <Main
                   cards={cards}
@@ -236,13 +243,14 @@ function App() {
                   onCardClick={handleCardClick}
                 />
               </ProtectedRoute>
-              <Route path="/sign-up">
+              <Route path={routes.signUp}>
                 <Register
                   buttonText={!isLoading ? 'Зарегистрироваться' : 'Выполнение...'}
                   onRegistration={handleRegistration}
+                  linkToSignIn={routes.signIn}
                 />
               </Route>
-              <Route path="/sign-in">
+              <Route path={routes.signIn}>
                 <Login
                   buttonText={!isLoading ? "Войти" : "Выполнение..."}
                   onLogin={handleLogin}
