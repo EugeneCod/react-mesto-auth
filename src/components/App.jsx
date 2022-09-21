@@ -1,21 +1,32 @@
 import { useEffect, useState } from 'react';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import api from '../utils/api';
-import { CurrentUserContext } from '../context/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupWithConfirmation from './PopupWithConfirmation';
-import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import * as auth from '../utils/auth.js';
 import InfoTooltip from './InfoTooltip';
+import ProtectedRoute from './ProtectedRoute';
+import { CurrentUserContext } from '../context/CurrentUserContext';
+import * as auth from '../utils/auth.js';
+import api from '../utils/api';
 
+
+const infoTooltpOptions = {
+  approval:  {
+    text: 'Вы успешно зарегистрировались!',
+    imageName: 'approval'
+  },
+  failure: {
+    text: 'Что-то пошло не так! Попробуйте ещё раз.',
+    imageName: 'failure'
+  }
+}
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -34,33 +45,34 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    Promise.all([
-      api.getUserInfo(),
-      api.getCards(),
-    ])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData)
-      })
-      .catch(err => console.log(`${err} при первичной загрузке данных`));
-  }, [])
-  
+    loggedIn &&
+      Promise.all([
+        api.getUserInfo(),
+        api.getCards(),
+      ])
+        .then(([userData, cardsData]) => {
+          setCurrentUser(userData);
+          setCards(cardsData)
+        })
+        .catch(err => console.log(`${err} при первичной загрузке данных`));
+  }, [loggedIn])
+
   useEffect(() => {
     if (!loggedIn) return;
     history.push('/');
   }, [loggedIn, history])
-  
+
   useEffect(() => {
-    function tokenCheck () {
+    function tokenCheck() {
       if (!localStorage.getItem('jwt')) return;
       const jwt = localStorage.getItem('jwt');
       auth.getEmail(jwt)
-      .then(res => {
-        setLoggedIn(true);
-        setUserEmail(res.data.email);
-        history.push('/');
-      })
-      .catch(err => console.log(err));
+        .then(res => {
+          setLoggedIn(true);
+          setUserEmail(res.data.email);
+          history.push('/');
+        })
+        .catch(err => console.log(err));
     }
     tokenCheck();
   }, [history])
@@ -155,24 +167,17 @@ function App() {
         setIsLoading(false);
       })
   }
-  
+
   function handleRegistration(email, password) {
     setIsLoading(true);
     auth.register(email, password)
       .then((res) => {
-        setInfoTooltipData({
-          text: 'Вы успешно зарегистрировались!',
-          imageName: 'approval'
-        });
+        setInfoTooltipData(infoTooltpOptions.approval);
         setIsInfoTooltipOpen(true);
         history.push('/sign-in');
       })
       .catch(err => {
-        setInfoTooltipData({
-          text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          // text: err,
-          imageName: 'failure'
-        });
+        setInfoTooltipData(infoTooltpOptions.failure);
         setIsInfoTooltipOpen(true);
       })
       .finally(() => {
@@ -189,11 +194,7 @@ function App() {
       })
       .catch(err => {
         console.log(err);
-        setInfoTooltipData({
-          text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          // text: err,
-          imageName: 'failure'
-        });
+        setInfoTooltipData(infoTooltpOptions.failure);
         setIsInfoTooltipOpen(true);
       })
       .finally(() => {
@@ -206,7 +207,7 @@ function App() {
     setLoggedIn(false);
     history.push('/sign-in');
   }
-  
+
   return (
     <CurrentUserContext.Provider value={
       currentUser
@@ -220,12 +221,12 @@ function App() {
           />
           <div className="container">
             <Switch>
-              <ProtectedRoute 
+              <ProtectedRoute
                 path="/"
                 exact
                 loggedIn={loggedIn}
               >
-                <Main 
+                <Main
                   cards={cards}
                   onCardLike={handleCardLike}
                   onCardDelete={handleCardDeleteIconClick}
