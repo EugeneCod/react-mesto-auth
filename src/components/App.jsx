@@ -15,6 +15,7 @@ import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../context/CurrentUserContext';
 import * as auth from '../utils/auth.js';
 import api from '../utils/api';
+import ErrorPage from './ErrorPage';
 
 
 const infoTooltpOptions = {
@@ -257,7 +258,7 @@ function App() {
                 />
               </Route>
               <Route path="*">
-                <p style={{ color: "white", textAlign: "center", minHeight: "100vh", marginTop: "50px" }}>404 NOT FOUND</p>
+                <ErrorPage />
               </Route>
             </Switch>
             {loggedIn && <Footer />}

@@ -1,0 +1,13 @@
+.error-page__message {
+  text-align: center;
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.21;
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .error-page__message {
+    font-size: 24px;
+  }
+}
