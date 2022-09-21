@@ -1,21 +1,39 @@
 import { useEffect, useState } from 'react';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import api from '../utils/api';
-import { CurrentUserContext } from '../context/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupWithConfirmation from './PopupWithConfirmation';
-import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
 import Login from './Login';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import * as auth from '../utils/auth.js';
 import InfoTooltip from './InfoTooltip';
+import ProtectedRoute from './ProtectedRoute';
+import { CurrentUserContext } from '../context/CurrentUserContext';
+import * as auth from '../utils/auth.js';
+import api from '../utils/api';
+import ErrorPage from './ErrorPage';
 
+
+const infoTooltpOptions = {
+  approval:  {
+    text: 'Вы успешно зарегистрировались!',
+    imageName: 'approval'
+  },
+  failure: {
+    text: 'Что-то пошло не так! Попробуйте ещё раз.',
+    imageName: 'failure'
+  }
+}
+
+const routes = {
+  baseRoute: '/',
+  signIn: '/sign-in',
+  signUp: '/sign-up',
+}; 
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -34,33 +52,34 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    Promise.all([
-      api.getUserInfo(),
-      api.getCards(),
-    ])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData)
-      })
-      .catch(err => console.log(`${err} при первичной загрузке данных`));
-  }, [])
-  
+    loggedIn &&
+      Promise.all([
+        api.getUserInfo(),
+        api.getCards(),
+      ])
+        .then(([userData, cardsData]) => {
+          setCurrentUser(userData);
+          setCards(cardsData)
+        })
+        .catch(err => console.log(`${err} при первичной загрузке данных`));
+  }, [loggedIn])
+
   useEffect(() => {
     if (!loggedIn) return;
-    history.push('/');
+    history.push(routes.baseRoute);
   }, [loggedIn, history])
-  
+
   useEffect(() => {
-    function tokenCheck () {
+    function tokenCheck() {
       if (!localStorage.getItem('jwt')) return;
       const jwt = localStorage.getItem('jwt');
       auth.getEmail(jwt)
-      .then(res => {
-        setLoggedIn(true);
-        setUserEmail(res.data.email);
-        history.push('/');
-      })
-      .catch(err => console.log(err));
+        .then(res => {
+          setLoggedIn(true);
+          setUserEmail(res.data.email);
+          history.push(routes.baseRoute);
+        })
+        .catch(err => console.log(err));
     }
     tokenCheck();
   }, [history])
@@ -155,24 +174,17 @@ function App() {
         setIsLoading(false);
       })
   }
-  
+
   function handleRegistration(email, password) {
     setIsLoading(true);
     auth.register(email, password)
       .then((res) => {
-        setInfoTooltipData({
-          text: 'Вы успешно зарегистрировались!',
-          imageName: 'approval'
-        });
+        setInfoTooltipData(infoTooltpOptions.approval);
         setIsInfoTooltipOpen(true);
-        history.push('/sign-in');
+        history.push(routes.signIn);
       })
       .catch(err => {
-        setInfoTooltipData({
-          text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          // text: err,
-          imageName: 'failure'
-        });
+        setInfoTooltipData(infoTooltpOptions.failure);
         setIsInfoTooltipOpen(true);
       })
       .finally(() => {
@@ -189,11 +201,7 @@ function App() {
       })
       .catch(err => {
         console.log(err);
-        setInfoTooltipData({
-          text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          // text: err,
-          imageName: 'failure'
-        });
+        setInfoTooltipData(infoTooltpOptions.failure);
         setIsInfoTooltipOpen(true);
       })
       .finally(() => {
@@ -204,9 +212,9 @@ function App() {
   function handleLogout() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
-    history.push('/sign-in');
+    history.push(routes.signIn);
   }
-  
+
   return (
     <CurrentUserContext.Provider value={
       currentUser
@@ -220,35 +228,36 @@ function App() {
           />
           <div className="container">
             <Switch>
-              <ProtectedRoute 
-                path="/"
+              <ProtectedRoute
+                path={routes.baseRoute}
                 exact
                 loggedIn={loggedIn}
+                linkToSignIn={routes.signIn}
+                component={Main}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDeleteIconClick}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
               >
-                <Main 
-                  cards={cards}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDeleteIconClick}
-                  onEditAvatar={handleEditAvatarClick}
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={handleAddPlaceClick}
-                  onCardClick={handleCardClick}
-                />
               </ProtectedRoute>
-              <Route path="/sign-up">
+              <Route path={routes.signUp}>
                 <Register
                   buttonText={!isLoading ? 'Зарегистрироваться' : 'Выполнение...'}
                   onRegistration={handleRegistration}
+                  linkToSignIn={routes.signIn}
                 />
               </Route>
-              <Route path="/sign-in">
+              <Route path={routes.signIn}>
                 <Login
                   buttonText={!isLoading ? "Войти" : "Выполнение..."}
                   onLogin={handleLogin}
                 />
               </Route>
               <Route path="*">
-                <p style={{ color: "white", textAlign: "center", minHeight: "100vh", marginTop: "50px" }}>404 NOT FOUND</p>
+                <ErrorPage />
               </Route>
             </Switch>
             {loggedIn && <Footer />}

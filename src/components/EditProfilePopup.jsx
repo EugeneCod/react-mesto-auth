@@ -29,11 +29,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
   }, [currentUser, isOpen])
 
   useEffect(() => {
-    if (inputValid.name === false || inputValid.about === false) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
+    setFormValid(!!inputValid.name && !!inputValid.about);
   }, [inputValid, formValid])
 
   return (

@@ -21,11 +21,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, buttonText }) {
   }
 
   useEffect(() => {
-    if (inputValid.avatar === false) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
+    setFormValid(!!inputValid.avatar);
   }, [inputValid, formValid])
 
   useEffect(() => {

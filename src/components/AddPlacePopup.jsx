@@ -16,11 +16,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
   }
 
   useEffect(() => {
-    if (inputValid.name === false || inputValid.link === false) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
+    setFormValid(!!inputValid.name && !!inputValid.link);
   }, [inputValid, formValid])
 
   useEffect(() => {

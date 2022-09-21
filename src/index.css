@@ -96,3 +96,7 @@
 @import url(./blocks/registration/__signin/registration__signin.css);
 @import url(./blocks/registration/__signin-link/registration__signin-link.css);
 @import url(./blocks/registration/__signin-text/registration__signin-text.css);
+
+@import url(./blocks/error-page/error-page.css);
+@import url(./blocks/error-page/__message/error-page__message.css);
+@import url(./blocks/error-page/__error-code/error-page__error-code.css);

@@ -34,10 +34,7 @@ class Api {
     return fetch(`${this._host}/users/me`, {
       method: 'PATCH',
       headers: this._getHeaders(),
-      body: JSON.stringify({
-        name: data.name,
-        about: data.about
-      })
+      body: JSON.stringify(data)
     })
     .then(this._getJsonOrError)
   }
@@ -46,9 +43,7 @@ class Api {
     return fetch(`${this._host}/users/me/avatar `, {
       method: 'PATCH',
       headers: this._getHeaders(),
-      body: JSON.stringify({
-        avatar: data.avatar
-      })
+      body: JSON.stringify(data)
     })
     .then(this._getJsonOrError)
     
@@ -65,10 +60,7 @@ class Api {
     return fetch(`${this._host}/cards`, {
       method: 'POST',
       headers: this._getHeaders(),
-      body: JSON.stringify({
-        name: data.name,
-        link: data.link
-      })
+      body: JSON.stringify(data)
     })
     .then(this._getJsonOrError)
   }
@@ -81,14 +73,8 @@ class Api {
   }
 
   changeLikeCardStatus(isLiked, cardId) {
-    let method;
-    if (isLiked) {
-      method = 'DELETE';
-    } else {
-      method = 'PUT'
-    }
     return fetch(`${this._host}/cards/${cardId}/likes`, {
-      method: `${method}`,
+      method: `${isLiked ? 'DELETE' : 'PUT'}`,
       headers: this._getHeaders()
     })
     .then(this._getJsonOrError)
